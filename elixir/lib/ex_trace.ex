@@ -1,5 +1,11 @@
 defmodule ExTrace do
 
+  def send_command() do
+    opts = [:binary, packet: :line, active: false]
+    {:ok, socket} = :gen_tcp.connect('localhost', 4040, opts)
+    send_and_recv(socket, "GET shopping eggs\r\n")
+  end
+
   def test_kv_server() do
     opts = [:binary, packet: :line, active: false]
     {:ok, socket} = :gen_tcp.connect('localhost', 4040, opts)
