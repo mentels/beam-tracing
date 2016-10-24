@@ -13,7 +13,7 @@ defmodule ExTrace.BIFs do
   The trace messages are sent to the process that called 
   the `erlang:trace/3`.
 
-  To clear all of the traces call `clear_all/0`.
+  To clear all of the trace flags call `clear_all/0`.
   
   ### Example:
      
