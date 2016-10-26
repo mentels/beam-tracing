@@ -134,9 +134,9 @@ defmodule ExTrace.Dbg do
 
   def trace_chain_distributed() do
     :dbg.tracer()
-    for n <- other_nodes() do
+    true = for n <- other_nodes() do
       :dbg.n(n)
-    end |> Enum.all?(&(elem(&1,1) == :ok))
+    end |> Enum.all?(&(elem(&1,0) == :ok))
     :dbg.p(:processes, :c)
     ms = [{
            [:_, :_],
@@ -149,11 +149,14 @@ defmodule ExTrace.Dbg do
   end
 
   def stop_clear() do
+    true = for n <- other_nodes() do
+      :dbg.cn(n)
+    end |> Enum.all?(&(&1 == :ok))
     :dbg.p(:all, :clear)
     :dbg.stop_clear()
   end
 
-  defp other_nodes() do
+  def other_nodes() do
     KV.Router.table
     |> Enum.unzip
     |> elem(1)
