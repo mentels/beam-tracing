@@ -126,7 +126,7 @@ defmodule ExTrace.BIFs do
   """  
   def trace_commands(tracer \\ self) do
     procs = :erlang.trace(:all, true, [:call, {:tracer, tracer}])
-    ptrns = :erlang.trace_pattern({Command, :run, 1}, true, [])
+    ptrns = :erlang.trace_pattern({KVServer.Command, :run, 1}, true, [])
     Logger.info "Matched #{procs} procs and #{ptrns} patterns"
   end
 
