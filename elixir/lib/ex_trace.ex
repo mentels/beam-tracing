@@ -1,9 +1,10 @@
 defmodule ExTrace do
 
-  def send_command() do
+  def test_kv_server_create(bucket \\ "alaska") do
     opts = [:binary, packet: :line, active: false]
     {:ok, socket} = :gen_tcp.connect('localhost', 4040, opts)
-    send_and_recv(socket, "GET shopping eggs\r\n")
+    send_and_recv(socket, "CREATE #{bucket}\r\n")
+    :gen_tcp.close(socket)
   end
 
   def test_kv_server(bucket \\ "alaska") do
@@ -13,7 +14,7 @@ defmodule ExTrace do
     send_and_recv(socket, "CREATE #{bucket}\r\n")
     send_and_recv(socket, "PUT #{bucket} bear 3\r\n")
     send_and_recv(socket, "GET #{bucket} bear\r\n")
-    send_and_recv(socket, "DELETE #{bucket} bear\r\n")
+    # send_and_recv(socket, "DELETE #{bucket} bear\r\n")
     :gen_tcp.close(socket)
   end
 
