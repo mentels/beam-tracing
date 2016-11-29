@@ -1,4 +1,4 @@
-defmodule ExTrace.KV do
+defmodule ExTrace.KvUtils do
   def create(bucket), do: send_command("CREATE #{bucket}\r\n")
   def put(bucket, key, value),
     do: send_command("PUT #{bucket} #{key} #{value}\r\n")
@@ -17,6 +17,12 @@ defmodule ExTrace.KV do
       pid when is_pid(pid) -> pid
       _ -> raise "Unable to find KV.Bucket.Supervisor pid"
     end
+  end
+
+  def setup() do
+    :erlang.trace(:all, false, [:all])
+    buckets = Supervisor.which_children(KV.Bucket.Supervisor)
+    for {_, pid, _, _,} <- buckets, do: Process.exit(pid, :kill)
   end
   
   defp send_command(command) do
